@@ -1,4 +1,4 @@
-name: Build Plugins and Push to DhakaFlix_Cloudstream
+name: Build Plugins (Local Builds Branch Only)
 
 concurrency: 
   group: "build"
@@ -23,6 +23,15 @@ jobs:
         with:
           path: src
 
+      - name: Checkout Builds Branch
+        uses: actions/checkout@v3
+        with:
+          ref: builds
+          path: builds
+
+      - name: Clean Old Builds
+        run: rm -f $GITHUB_WORKSPACE/builds/*.cs3 || true
+
       - name: Setup JDK 17
         uses: actions/setup-java@v4
         with:
@@ -34,18 +43,14 @@ jobs:
           cd $GITHUB_WORKSPACE/src
           chmod +x gradlew
           ./gradlew make makePluginsJson
-          mkdir -p $GITHUB_WORKSPACE/builds
           cp **/build/*.cs3 $GITHUB_WORKSPACE/builds || true
           cp build/plugins.json $GITHUB_WORKSPACE/builds
 
-      - name: Push to DhakaFlix_Cloudstream repo
+      - name: Push Builds to builds branch
         run: |
           cd $GITHUB_WORKSPACE/builds
-          git init
-          git checkout -b builds
           git config user.email "actions@github.com"
           git config user.name "GitHub Actions"
-          git remote add origin https://x-access-token:${{ secrets.DHAKAFLIX_TOKEN }}@github.com/ALLBYNAJID/DhakaFlix_Cloudstream.git
           git add .
-          git commit -m "Update plugins.json from cloudstream"
-          git push --force origin builds
+          git commit --amend -m "Build $GITHUB_SHA" || exit 0
+          git push --force
