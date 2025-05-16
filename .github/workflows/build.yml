@@ -1,11 +1,10 @@
-name: Build
+name: Build Plugins
 
 concurrency: 
   group: "build"
   cancel-in-progress: true
 
 on:
-  workflow_dispatch:
   push:
     branches:
       - main
@@ -16,15 +15,14 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout Source
-        uses: actions/checkout@v3
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
         with:
           path: src
 
       - name: Checkout Builds Branch
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: builds
           path: builds
@@ -38,21 +36,22 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      # Android SDK setup has been skipped / removed here
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v2
 
       - name: Build Plugins
         run: |
-          cd $GITHUB_WORKSPACE/src
-          chmod +x gradlew
+          cd src
+          chmod +x ./gradlew
           ./gradlew make makePluginsJson
-          cp **/build/*.cs3 $GITHUB_WORKSPACE/builds
-          cp build/plugins.json $GITHUB_WORKSPACE/builds
+          cp **/build/*.cs3 ../builds || true
+          cp build/plugins.json ../builds
 
-      - name: Push Builds
+      - name: Push Builds to Builds Branch
         run: |
-          cd $GITHUB_WORKSPACE/builds
-          git config --local user.email "actions@github.com"
-          git config --local user.name "GitHub Actions"
+          cd builds
+          git config user.email "actions@github.com"
+          git config user.name "GitHub Actions"
           git add .
-          git commit --amend -m "Build $GITHUB_SHA" || exit 0
+          git commit --amend -m "Build $GITHUB_SHA" || true
           git push --force
