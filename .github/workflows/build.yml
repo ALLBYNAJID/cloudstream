@@ -1,7 +1,7 @@
-name: Cross-Build Plugins to DhakaFlix_Cloudstream
+name: Cross Build Plugin
 
+# Run only on push to main or master
 on:
-  workflow_dispatch:
   push:
     branches:
       - main
@@ -9,39 +9,61 @@ on:
     paths-ignore:
       - '*.md'
 
+concurrency:
+  group: "crossbuild"
+  cancel-in-progress: true
+
 jobs:
-  build:
+  build-plugin:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Plugin Source (main repo)
+      # Checkout current repository (cloudstream)
+      - name: Checkout main repo
         uses: actions/checkout@v3
         with:
           path: src
 
-      - name: Setup JDK 17
+      # Set up JDK 17 for Android build
+      - name: Set up Java
         uses: actions/setup-java@v4
         with:
-          java-version: '17'
           distribution: 'temurin'
+          java-version: '17'
 
+      # Manually set up Android SDK (since android-actions/setup-android is restricted)
+      - name: Install Android SDK manually
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y openjdk-17-jdk unzip wget
+          wget https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip
+          unzip commandlinetools-linux-*.zip -d android-sdk
+          mkdir -p ${HOME}/android-sdk/cmdline-tools/latest
+          mv android-sdk/cmdline-tools/* ${HOME}/android-sdk/cmdline-tools/latest/
+          export ANDROID_HOME=${HOME}/android-sdk
+          export PATH=$PATH:${ANDROID_HOME}/cmdline-tools/latest/bin:${ANDROID_HOME}/platform-tools
+          yes | sdkmanager --licenses
+          sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.2"
+
+      # Build the plugin project
       - name: Build Plugins
         run: |
           cd src
           chmod +x gradlew
           ./gradlew make makePluginsJson
-          mkdir -p ../builds
-          cp **/build/*.cs3 ../builds || true
-          cp build/plugins.json ../builds || true
+          mkdir -p $GITHUB_WORKSPACE/builds
+          cp **/build/*.cs3 $GITHUB_WORKSPACE/builds || true
+          cp build/plugins.json $GITHUB_WORKSPACE/builds || true
 
-      - name: Push to DhakaFlix_Cloudstream repo
+      # Push the builds to DhakaFlix_Cloudstream repository under "builds" branch
+      - name: Push to DhakaFlix_Cloudstream
         run: |
-          cd ../builds
+          cd $GITHUB_WORKSPACE/builds
           git init
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           git remote add origin https://x-access-token:${{ secrets.DHAKAFLIX_TOKEN }}@github.com/ALLBYNAJID/DhakaFlix_Cloudstream.git
           git checkout -b builds
           git add .
-          git commit -m "Cross-build plugin from cloudstream: $GITHUB_SHA"
+          git diff --cached --quiet || git commit -m "Cross-build plugin from cloudstream: $GITHUB_SHA"
           git push --force origin builds
