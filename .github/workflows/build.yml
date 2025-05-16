@@ -1,4 +1,4 @@
-name: Build
+name: Build All Plugins
 
 concurrency:
   group: "build"
@@ -7,16 +7,17 @@ concurrency:
 on:
   push:
     branches:
-      - master
       - main
+      - master
     paths-ignore:
       - '*.md'
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout main source
+      - name: Checkout source
         uses: actions/checkout@v4
         with:
           path: "src"
@@ -36,7 +37,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Manually Setup Android SDK
+      - name: Setup Android SDK manually
         run: |
           sudo apt-get update
           sudo apt-get install -y wget unzip
@@ -46,24 +47,25 @@ jobs:
           mkdir -p $HOME/android-sdk/cmdline-tools/latest
           mv $HOME/android-sdk/cmdline-tools/cmdline-tools/* $HOME/android-sdk/cmdline-tools/latest/
           echo "ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
+          echo "ANDROID_SDK_ROOT=$HOME/android-sdk" >> $GITHUB_ENV
           echo "$HOME/android-sdk/cmdline-tools/latest/bin" >> $GITHUB_PATH
           echo "$HOME/android-sdk/platform-tools" >> $GITHUB_PATH
           yes | $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses
           $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.2"
 
-      - name: Build Plugins
+      - name: Cross Build All Plugins
         run: |
           cd $GITHUB_WORKSPACE/src
           chmod +x gradlew
           ./gradlew make makePluginsJson
-          cp **/build/*.cs3 $GITHUB_WORKSPACE/builds || true
-          cp build/plugins.json $GITHUB_WORKSPACE/builds || true
+          find . -name "*.cs3" -exec cp {} $GITHUB_WORKSPACE/builds \;
+          cp build/plugins.json $GITHUB_WORKSPACE/builds
 
       - name: Push builds
         run: |
           cd $GITHUB_WORKSPACE/builds
-          git config user.email "actions@github.com"
-          git config user.name "GitHub Actions"
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
           git add .
           git commit --amend -m "Build $GITHUB_SHA" || exit 0
           git push --force
