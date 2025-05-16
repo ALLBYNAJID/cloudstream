@@ -2,7 +2,7 @@
 version = 2
 
 android {
-    namespace = "com.niloy"
+    namespace = "com.najid"
 }
 
 dependencies {
@@ -14,7 +14,7 @@ cloudstream {
     // All of these properties are optional, you can safely remove them
 
     description = "DhakaFlix BDIX Provider with TMDB support for media description"
-    authors = listOf("Niloy")
+    authors = listOf("Najid")
 
     /**
      * Status int as the following:
