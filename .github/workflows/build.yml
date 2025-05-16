@@ -1,14 +1,15 @@
-name: Build DhakaFlix Plugins
+name: Build
 
-concurrency:
+concurrency: 
   group: "build"
   cancel-in-progress: true
 
 on:
+  workflow_dispatch:
   push:
     branches:
-      - master
       - main
+      - master
     paths-ignore:
       - '*.md'
 
@@ -16,57 +17,43 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    env:
-      GIT_TOKEN: ${{ secrets.DHAKAFLIX_TOKEN }}
-
     steps:
-      - name: Checkout main repo
-        uses: actions/checkout@v4
+      - name: Checkout Source
+        uses: actions/checkout@v3
         with:
-          path: "src"
+          path: src
 
-      - name: Checkout builds branch
-        uses: actions/checkout@v4
+      - name: Checkout Builds Branch
+        uses: actions/checkout@v3
         with:
-          ref: "builds"
-          path: "builds"
-          token: ${{ secrets.DHAKAFLIX_TOKEN }}
+          ref: builds
+          path: builds
 
-      - name: Clean old builds
+      - name: Clean Old Builds
         run: rm -f $GITHUB_WORKSPACE/builds/*.cs3 || true
 
-      - name: Install JDK 17
+      - name: Setup JDK 17
         uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
           java-version: '17'
+          distribution: 'temurin'
 
-      - name: Setup Android SDK (manual)
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y unzip wget
-          wget https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -O cmdline-tools.zip
-          unzip cmdline-tools.zip
-          mkdir -p $HOME/android-sdk/cmdline-tools
-          mv cmdline-tools $HOME/android-sdk/cmdline-tools/latest
-          export ANDROID_HOME=$HOME/android-sdk
-          export PATH=$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$PATH
-          yes | sdkmanager --licenses
-          sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.2"
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v2
 
-      - name: Build plugins
+      - name: Build Plugins
         run: |
-          cd src
+          cd $GITHUB_WORKSPACE/src
           chmod +x gradlew
           ./gradlew make makePluginsJson
-          cp **/build/*.cs3 $GITHUB_WORKSPACE/builds/
-          cp build/plugins.json $GITHUB_WORKSPACE/builds/
+          cp **/build/*.cs3 $GITHUB_WORKSPACE/builds
+          cp build/plugins.json $GITHUB_WORKSPACE/builds
 
-      - name: Push to builds branch
+      - name: Push Builds
         run: |
-          cd builds
-          git config --global user.email "actions@github.com"
-          git config --global user.name "GitHub Actions"
+          cd $GITHUB_WORKSPACE/builds
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
           git add .
-          git commit --amend -m "Build $GITHUB_SHA" || echo "No changes to commit"
-          git push --force "https://${{ secrets.DHAKAFLIX_TOKEN }}@github.com/ALLBYNAJID/DhakaFlix_Cloudstream.git" HEAD:builds
+          git commit --amend -m "Build $GITHUB_SHA" || exit 0
+          git push --force
