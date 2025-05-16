@@ -1,4 +1,4 @@
-package com.niloy
+package com.najid
 
 import com.lagradost.cloudstream3.TvType
 import com.lagradost.cloudstream3.mainPageOf
