@@ -1,14 +1,14 @@
-name: Build Plugins
+name: Build
 
-concurrency: 
+concurrency:
   group: "build"
   cancel-in-progress: true
 
 on:
   push:
     branches:
-      - main
       - master
+      - main
     paths-ignore:
       - '*.md'
 
@@ -16,18 +16,18 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Source Code
+      - name: Checkout main source
         uses: actions/checkout@v4
         with:
-          path: src
+          path: "src"
 
-      - name: Checkout Builds Branch
+      - name: Checkout builds branch
         uses: actions/checkout@v4
         with:
-          ref: builds
-          path: builds
+          ref: "builds"
+          path: "builds"
 
-      - name: Clean Old Builds
+      - name: Clean old builds
         run: rm -f $GITHUB_WORKSPACE/builds/*.cs3 || true
 
       - name: Setup JDK 17
@@ -36,22 +36,34 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v2
+      - name: Manually Setup Android SDK
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget unzip
+          mkdir -p $HOME/android-sdk
+          wget https://dl.google.com/android/repository/commandlinetools-linux-10406996_latest.zip -O cmdline-tools.zip
+          unzip cmdline-tools.zip -d $HOME/android-sdk/cmdline-tools
+          mkdir -p $HOME/android-sdk/cmdline-tools/latest
+          mv $HOME/android-sdk/cmdline-tools/cmdline-tools/* $HOME/android-sdk/cmdline-tools/latest/
+          echo "ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
+          echo "$HOME/android-sdk/cmdline-tools/latest/bin" >> $GITHUB_PATH
+          echo "$HOME/android-sdk/platform-tools" >> $GITHUB_PATH
+          yes | $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses
+          $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.2"
 
       - name: Build Plugins
         run: |
-          cd src
-          chmod +x ./gradlew
+          cd $GITHUB_WORKSPACE/src
+          chmod +x gradlew
           ./gradlew make makePluginsJson
-          cp **/build/*.cs3 ../builds || true
-          cp build/plugins.json ../builds
+          cp **/build/*.cs3 $GITHUB_WORKSPACE/builds || true
+          cp build/plugins.json $GITHUB_WORKSPACE/builds || true
 
-      - name: Push Builds to Builds Branch
+      - name: Push builds
         run: |
-          cd builds
+          cd $GITHUB_WORKSPACE/builds
           git config user.email "actions@github.com"
           git config user.name "GitHub Actions"
           git add .
-          git commit --amend -m "Build $GITHUB_SHA" || true
+          git commit --amend -m "Build $GITHUB_SHA" || exit 0
           git push --force
