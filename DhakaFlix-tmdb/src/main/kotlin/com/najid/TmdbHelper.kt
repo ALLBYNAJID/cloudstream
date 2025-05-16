@@ -1,4 +1,4 @@
-package com.niloy
+package com.najid
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.lagradost.cloudstream3.app
