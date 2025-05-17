@@ -1,4 +1,4 @@
-package com.hexated
+package com.najid
 
 import com.lagradost.cloudstream3.extractors.XStreamCdn
 
