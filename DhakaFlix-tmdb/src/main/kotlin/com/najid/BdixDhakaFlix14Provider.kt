@@ -28,7 +28,7 @@ import java.util.Collections
 
 open class BdixDhakaFlix14Provider : MainAPI() {
     override var mainUrl = "http://172.16.50.14"
-    override var name = "(BDIX) DhakaFlix 14"
+    override var name = "DhakaFlix-Movies and Series"
     override val hasMainPage = true
     override val hasDownloadSupport = true
     override val hasQuickSearch = false
