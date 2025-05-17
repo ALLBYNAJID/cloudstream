@@ -1,6 +1,6 @@
 {
-    "name": "DhakaFlix BDIX",
-    "description": "DhakaFlix BDIX",
+    "name": "Najid's BDIX repository",
+    "description": "Najid's BDIX repository",
     "manifestVersion": 1,
     "pluginLists": [
       "https://raw.githubusercontent.com/ALLBYNAJID/cloudstream/builds/plugins.json"
