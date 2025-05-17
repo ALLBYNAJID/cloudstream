@@ -2,14 +2,14 @@
 version = 8
 
 android {
-    namespace = "com.redowan"
+    namespace = "com.najid"
 }
 
 cloudstream {
     // All of these properties are optional, you can safely remove them
 
     description = "Discovery BDIX Provider"
-    authors = listOf("Redowan")
+    authors = listOf("Najid")
 
     /**
      * Status int as the following:
