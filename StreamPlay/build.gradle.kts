@@ -9,11 +9,11 @@ android {
         buildConfig = true
         viewBinding = true
     }
+
     defaultConfig {
         val properties = Properties()
         properties.load(project.rootProject.file("local.properties").inputStream())
 
-        android.buildFeatures.buildConfig = true
         buildConfigField("String", "TMDB_API", "\"${properties.getProperty("TMDB_API")}\"")
         buildConfigField("String", "CINEMATV_API", "\"${properties.getProperty("CINEMATV_API")}\"")
         buildConfigField("String", "SFMOVIES_API", "\"${properties.getProperty("SFMOVIES_API")}\"")
@@ -49,20 +49,9 @@ android {
 
 cloudstream {
     language = "en"
-
     description = "#1 best extension based on MultiAPI"
-
-    authors = listOf("Najid")  // Changed author list here
-
-    /**
-     * Status int as the following:
-     * 0: Down
-     * 1: Ok
-     * 2: Slow
-     * 3: Beta only
-     * */
-    status = 1 // will be 3 if unspecified
-
+    authors = listOf("Najid") // Only Najid now
+    status = 1
     tvTypes = listOf(
         "AsianDrama",
         "TvSeries",
@@ -71,26 +60,14 @@ cloudstream {
         "Cartoon",
         "AnimeMovie"
     )
-
     iconUrl = "https://i3.wp.com/yt3.googleusercontent.com/ytc/AIdro_nCBArSmvOc6o-k2hTYpLtQMPrKqGtAw_nC20rxm70akA=s900-c-k-c0x00ffffff-no-rj?ssl=1"
-
     requiresResources = true
     isCrossPlatform = false
 }
 
-repositories {
-    google()
-    mavenCentral()
-    maven { url = uri("https://jitpack.io") } // Added jitpack for cloudstream3 dependency
-}
-
 dependencies {
-    // FIXME remove this when crossplatform is fully supported
-    val cloudstream by configurations
-
     implementation("com.google.android.material:material:1.12.0")
     implementation("androidx.browser:browser:1.8.0")
-
-    // Fixed dependency with correct repository above
+    // Only one cloudstream dependency declaration here:
     cloudstream("com.lagradost:cloudstream3:pre-release")
 }
