@@ -48,7 +48,7 @@ android {
 cloudstream {
     language = "en"
     description = "#1 best extension based on MultiAPI"
-    authors = listOf("Phisher98", "Hexated", "salman731")
+    authors = listOf("Najid")
     status = 1
     tvTypes = listOf(
         "AsianDrama",
