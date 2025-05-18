@@ -12,8 +12,8 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.annotation.RequiresApi
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.phisher98.BuildConfig
-import com.phisher98.StreamPlayPlugin
+import com.najid.BuildConfig
+import com.najid.StreamPlayPlugin
 import com.lagradost.cloudstream3.CommonActivity.showToast
 
 class SettingsFragment(
