@@ -13,7 +13,7 @@ buildscript {
     dependencies {
         classpath("com.android.tools.build:gradle:8.7.3")
         classpath("com.github.recloudstream:gradle:-SNAPSHOT")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.22") // stable Kotlin version
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.22") // Compatible and stable
     }
 }
 
@@ -35,14 +35,13 @@ subprojects {
     apply(plugin = "com.lagradost.cloudstream3.gradle")
 
     cloudstream {
-        // Use environment variable GITHUB_REPOSITORY if available, else fallback repo URL
         setRepo(System.getenv("GITHUB_REPOSITORY") ?: "https://github.com/ALLBYNAJID/cloudstream")
     }
 
     android {
         namespace = "recloudstream"
 
-        compileSdk = 35  // use property instead of deprecated compileSdkVersion
+        compileSdkVersion(35) // FIXED HERE
 
         defaultConfig {
             minSdk = 21
@@ -56,7 +55,7 @@ subprojects {
 
         tasks.withType<KotlinJvmCompile>().configureEach {
             compilerOptions {
-                jvmTarget.set(JvmTarget.JVM_1_8) // Required for Kotlin JVM target 1.8
+                jvmTarget.set(JvmTarget.JVM_1_8)
                 freeCompilerArgs.addAll(
                     "-Xno-call-assertions",
                     "-Xno-param-assertions",
@@ -71,7 +70,6 @@ subprojects {
         val implementation by configurations
 
         cloudstream("com.github.recloudstream.cloudstream:pre-release")
-
         implementation(kotlin("stdlib"))
         implementation("com.github.Blatzar:NiceHttp:0.4.12")
         implementation("org.jsoup:jsoup:1.18.3")
