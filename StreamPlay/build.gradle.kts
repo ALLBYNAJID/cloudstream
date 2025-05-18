@@ -1,17 +1,17 @@
-// File: StreamPlay/build.gradle.kts
+@file:Suppress("UnstableApiUsage")
+
+import org.jetbrains.kotlin.konan.properties.Properties
 
 version = 267
-
 android {
     buildFeatures {
         buildConfig = true
         viewBinding = true
     }
-
     defaultConfig {
-        val properties = org.jetbrains.kotlin.konan.properties.Properties()
+        val properties = Properties()
         properties.load(project.rootProject.file("local.properties").inputStream())
-
+        android.buildFeatures.buildConfig=true
         buildConfigField("String", "TMDB_API", "\"${properties.getProperty("TMDB_API")}\"")
         buildConfigField("String", "CINEMATV_API", "\"${properties.getProperty("CINEMATV_API")}\"")
         buildConfigField("String", "SFMOVIES_API", "\"${properties.getProperty("SFMOVIES_API")}\"")
@@ -47,9 +47,19 @@ android {
 
 cloudstream {
     language = "en"
-    description = "#1 best extension based on MultiAPI"
-    authors = listOf("Najid")
-    status = 1
+    // All of these properties are optional, you can safely remove them
+
+     description = "#1 best extention based on MultiAPI"
+     authors = listOf("Najid")
+
+    /**
+     * Status int as the following:
+     * 0: Down
+     * 1: Ok
+     * 2: Slow
+     * 3: Beta only
+     * */
+    status = 1 // will be 3 if unspecified
     tvTypes = listOf(
         "AsianDrama",
         "TvSeries",
@@ -58,13 +68,18 @@ cloudstream {
         "Cartoon",
         "AnimeMovie"
     )
+
     iconUrl = "https://i3.wp.com/yt3.googleusercontent.com/ytc/AIdro_nCBArSmvOc6o-k2hTYpLtQMPrKqGtAw_nC20rxm70akA=s900-c-k-c0x00ffffff-no-rj?ssl=1"
+
     requiresResources = true
     isCrossPlatform = false
+
 }
 
 dependencies {
+    // FIXME remove this when crossplatform is fully supported
+    val cloudstream by configurations
     implementation("com.google.android.material:material:1.12.0")
     implementation("androidx.browser:browser:1.8.0")
-    // cloudstream dependency removed here
+    cloudstream("com.lagradost:cloudstream3:pre-release")
 }
