@@ -2,8 +2,8 @@ package com.phisher98
 
 import android.annotation.SuppressLint
 import com.google.gson.Gson
-import com.phisher98.StreamPlayTorrent.Companion.AnimetoshoAPI
-import com.phisher98.StreamPlayTorrent.Companion.TRACKER_LIST_URL
+import com.najid.StreamPlayTorrent.Companion.AnimetoshoAPI
+import com.najid.StreamPlayTorrent.Companion.TRACKER_LIST_URL
 import com.lagradost.cloudstream3.amap
 import com.lagradost.cloudstream3.app
 import com.lagradost.cloudstream3.utils.ExtractorLink
