@@ -1,6 +1,4 @@
-@file:Suppress("UnstableApiUsage")
-
-import org.jetbrains.kotlin.konan.properties.Properties
+// File: StreamPlay/build.gradle.kts
 
 version = 267
 
@@ -11,7 +9,7 @@ android {
     }
 
     defaultConfig {
-        val properties = Properties()
+        val properties = org.jetbrains.kotlin.konan.properties.Properties()
         properties.load(project.rootProject.file("local.properties").inputStream())
 
         buildConfigField("String", "TMDB_API", "\"${properties.getProperty("TMDB_API")}\"")
@@ -68,7 +66,5 @@ cloudstream {
 dependencies {
     implementation("com.google.android.material:material:1.12.0")
     implementation("androidx.browser:browser:1.8.0")
-
-    // Only ONE cloudstream declaration allowed
-    cloudstream("com.lagradost:cloudstream3:pre-release")
+    // cloudstream dependency removed here
 }
