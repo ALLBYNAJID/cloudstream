@@ -37,7 +37,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Setup Android SDK manually
+      - name: Setup Android SDK
         run: |
           sudo apt-get update
           sudo apt-get install -y wget unzip
@@ -54,10 +54,9 @@ jobs:
           $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.2"
 
       - name: Create local.properties
-        run: |
-          echo "sdk.dir=$ANDROID_SDK_ROOT" > $GITHUB_WORKSPACE/src/local.properties
+        run: echo "sdk.dir=$ANDROID_SDK_ROOT" > $GITHUB_WORKSPACE/src/local.properties
 
-      - name: Cross Build All Plugins
+      - name: Build Plugins
         run: |
           cd $GITHUB_WORKSPACE/src
           chmod +x gradlew
@@ -65,7 +64,7 @@ jobs:
           find . -name "*.cs3" -exec cp {} $GITHUB_WORKSPACE/builds \;
           cp build/plugins.json $GITHUB_WORKSPACE/builds
 
-      - name: Push builds
+      - name: Push Builds
         run: |
           cd $GITHUB_WORKSPACE/builds
           git config --local user.email "actions@github.com"
