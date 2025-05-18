@@ -1,9 +1,9 @@
-package com.phisher98
+package com.najid
 
 import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
-import com.phisher98.StreamPlay.Companion.animepaheAPI
+import com.najid.StreamPlay.Companion.animepaheAPI
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
@@ -35,7 +35,7 @@ import com.lagradost.cloudstream3.utils.ExtractorApi
 import com.lagradost.cloudstream3.utils.ExtractorLink
 import com.lagradost.cloudstream3.utils.M3u8Helper
 import com.lagradost.nicehttp.RequestBodyTypes
-import com.phisher98.StreamPlay.Companion.modflixAPI
+import com.najid.StreamPlay.Companion.modflixAPI
 import kotlinx.serialization.Serializable
 import okhttp3.FormBody
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
