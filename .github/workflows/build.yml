@@ -1,69 +1,43 @@
-name: Build StreamPlay Plugin
-
-concurrency:
-  group: "build"
-  cancel-in-progress: true
+name: Build APK
 
 on:
-  push:
-    branches:
-      - main
-      - master
-    paths-ignore:
-      - '*.md'
+  workflow_dispatch:
 
 jobs:
   build:
+    name: Build Debug APK
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout source
-        uses: actions/checkout@v4
-        with:
-          path: "src"
+        uses: actions/checkout@v3
 
-      - name: Checkout builds branch
-        uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
         with:
-          ref: "builds"
-          path: "builds"
-
-      - name: Clean old builds
-        run: |
-          rm -f $GITHUB_WORKSPACE/builds/*.cs3 || true
-          rm -f $GITHUB_WORKSPACE/builds/*.jar || true
-
-      - name: Setup JDK 17
-        uses: actions/setup-java@v4
-        with:
-          java-version: '17'
           distribution: 'temurin'
+          java-version: 17
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3.2.2
+      - name: Install Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          sdk-version: '33'
 
-      - name: Set StreamPlayAPI Secret to local.properties
-        env:
-          StreamPlayAPI: ${{ secrets.StreamPlayAPI }}
+      - name: Accept Licenses
+        run: yes | sdkmanager --licenses
+
+      - name: Create local.properties
         run: |
-          cd $GITHUB_WORKSPACE/src
-          echo StreamPlayAPI=$StreamPlayAPI >> local.properties
+          echo "sdk.dir=$HOME/android-sdk" > local.properties
 
-      - name: Build StreamPlay Plugin
-        run: |
-          cd $GITHUB_WORKSPACE/src
-          chmod +x gradlew
-          ./gradlew make makePluginsJson
-          ./gradlew ensureJarCompatibility
-          find . -name "*.cs3" -exec cp {} $GITHUB_WORKSPACE/builds \;
-          find . -name "*.jar" -exec cp {} $GITHUB_WORKSPACE/builds \;
-          cp build/plugins.json $GITHUB_WORKSPACE/builds
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
 
-      - name: Push builds
-        run: |
-          cd $GITHUB_WORKSPACE/builds
-          git config --local user.email "actions@github.com"
-          git config --local user.name "GitHub Actions"
-          git add .
-          git commit --amend -m "Build $GITHUB_SHA" || exit 0
-          git push --force
+      - name: Build debug APK
+        run: ./gradlew assembleDebug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: StreamPlay-debug-apk
+          path: app/build/outputs/apk/debug/*.apk
