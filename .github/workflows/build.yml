@@ -1,4 +1,4 @@
-name: Build Cloudstream Plugin
+name: Build Cloudstream Mod
 
 on:
   workflow_dispatch:
@@ -20,6 +20,10 @@ jobs:
 
       - name: Set up Android SDK
         uses: ALLBYNAJID/setup-android@main
+
+      - name: Generate local.properties
+        run: |
+          echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
 
       - name: Make gradlew executable
         run: chmod +x ./gradlew
