@@ -50,7 +50,7 @@ android {
 cloudstream {
     language = "en"
     description = "#1 best extension based on MultiAPI"
-    authors = listOf("Najid") // Only Najid now
+    authors = listOf("Phisher98", "Hexated", "salman731")
     status = 1
     tvTypes = listOf(
         "AsianDrama",
@@ -68,6 +68,5 @@ cloudstream {
 dependencies {
     implementation("com.google.android.material:material:1.12.0")
     implementation("androidx.browser:browser:1.8.0")
-    // Only one cloudstream dependency declaration here:
     cloudstream("com.lagradost:cloudstream3:pre-release")
 }
