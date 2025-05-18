@@ -1,16 +1,16 @@
-package com.phisher98
+package com.najid
 
-import com.phisher98.StreamPlay.Companion.anilistAPI
-import com.phisher98.StreamPlay.Companion.malsyncAPI
-import com.phisher98.StreamPlayExtractor.invokeAnimeKai
-import com.phisher98.StreamPlayExtractor.invokeAnimeOwl
-import com.phisher98.StreamPlayExtractor.invokeAnimepahe
-import com.phisher98.StreamPlayExtractor.invokeAnitaku
-import com.phisher98.StreamPlayExtractor.invokeAnizone
-import com.phisher98.StreamPlayExtractor.invokeGrani
-import com.phisher98.StreamPlayExtractor.invokeHianime
-import com.phisher98.StreamPlayExtractor.invokeKickAssAnime
-import com.phisher98.StreamPlayExtractor.invokeMiruroanimeGogo
+import com.najid.StreamPlay.Companion.anilistAPI
+import com.najid.StreamPlay.Companion.malsyncAPI
+import com.najid.StreamPlayExtractor.invokeAnimeKai
+import com.najid.StreamPlayExtractor.invokeAnimeOwl
+import com.najid.StreamPlayExtractor.invokeAnimepahe
+import com.najid.StreamPlayExtractor.invokeAnitaku
+import com.najid.StreamPlayExtractor.invokeAnizone
+import com.najid.StreamPlayExtractor.invokeGrani
+import com.najid.StreamPlayExtractor.invokeHianime
+import com.najid.StreamPlayExtractor.invokeKickAssAnime
+import com.najid.StreamPlayExtractor.invokeMiruroanimeGogo
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.lagradost.cloudstream3.CommonActivity.activity
 import com.lagradost.cloudstream3.DubStatus
@@ -45,7 +45,7 @@ import com.lagradost.cloudstream3.utils.AppUtils
 import com.lagradost.cloudstream3.utils.AppUtils.toJson
 import com.lagradost.cloudstream3.utils.ExtractorLink
 import com.lagradost.nicehttp.RequestBodyTypes
-import com.phisher98.StreamPlayExtractor.invokeAnichi
+import com.najid.StreamPlayExtractor.invokeAnichi
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.util.Calendar
