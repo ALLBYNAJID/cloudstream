@@ -1,5 +1,3 @@
-// File: build.gradle.kts
-
 import com.android.build.gradle.BaseExtension
 import com.lagradost.cloudstream3.gradle.CloudstreamExtension
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -7,23 +5,23 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 
 buildscript {
     repositories {
+        google()
         mavenCentral()
         maven("https://jitpack.io")
-        google()
     }
 
     dependencies {
         classpath("com.android.tools.build:gradle:8.7.3")
         classpath("com.github.recloudstream:gradle:-SNAPSHOT")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:2.1.0")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.22") // stable Kotlin version
     }
 }
 
 allprojects {
     repositories {
+        google()
         mavenCentral()
         maven("https://jitpack.io")
-        google()
     }
 }
 
@@ -37,15 +35,17 @@ subprojects {
     apply(plugin = "com.lagradost.cloudstream3.gradle")
 
     cloudstream {
+        // Use environment variable GITHUB_REPOSITORY if available, else fallback repo URL
         setRepo(System.getenv("GITHUB_REPOSITORY") ?: "https://github.com/ALLBYNAJID/cloudstream")
     }
 
     android {
         namespace = "recloudstream"
 
+        compileSdk = 35  // use property instead of deprecated compileSdkVersion
+
         defaultConfig {
             minSdk = 21
-            compileSdkVersion(35)
             targetSdk = 35
         }
 
@@ -54,9 +54,9 @@ subprojects {
             targetCompatibility = JavaVersion.VERSION_1_8
         }
 
-        tasks.withType<KotlinJvmCompile> {
+        tasks.withType<KotlinJvmCompile>().configureEach {
             compilerOptions {
-                jvmTarget.set(JvmTarget.JVM_1_8)
+                jvmTarget.set(JvmTarget.JVM_1_8) // Required for Kotlin JVM target 1.8
                 freeCompilerArgs.addAll(
                     "-Xno-call-assertions",
                     "-Xno-param-assertions",
@@ -70,7 +70,6 @@ subprojects {
         val cloudstream by configurations
         val implementation by configurations
 
-        // Cloudstream dependency applied only once per subproject
         cloudstream("com.github.recloudstream.cloudstream:pre-release")
 
         implementation(kotlin("stdlib"))
