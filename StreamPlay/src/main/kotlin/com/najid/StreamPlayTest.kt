@@ -2,13 +2,13 @@ package com.najid
 
 
 import android.content.SharedPreferences
-import com.phisher98.StreamPlayExtractor.invokeVidSrcXyz
+import com.najid.StreamPlayExtractor.invokeVidSrcXyz
 import com.lagradost.cloudstream3.SubtitleFile
 import com.lagradost.cloudstream3.argamap
 import com.lagradost.cloudstream3.runAllAsync
 import com.lagradost.cloudstream3.utils.AppUtils
 import com.lagradost.cloudstream3.utils.ExtractorLink
-import com.phisher98.StreamPlayExtractor.invokeExtramovies
+import com.najid.StreamPlayExtractor.invokeExtramovies
 
 class StreamPlayTest(sharedPreferences:SharedPreferences?=null) : StreamPlay(sharedPreferences) {
     override var name = "StreamPlay-Test"
