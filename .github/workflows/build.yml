@@ -53,6 +53,10 @@ jobs:
           yes | $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses
           $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.2"
 
+      - name: Create local.properties
+        run: |
+          echo "sdk.dir=$ANDROID_SDK_ROOT" > $GITHUB_WORKSPACE/src/local.properties
+
       - name: Cross Build All Plugins
         run: |
           cd $GITHUB_WORKSPACE/src
