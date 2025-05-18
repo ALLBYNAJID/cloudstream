@@ -1,16 +1,10 @@
-name: Build All Plugins
-
-concurrency:
-  group: "build"
-  cancel-in-progress: true
+name: Build Cloudstream Plugins
 
 on:
   push:
     branches:
       - main
-      - master
-    paths-ignore:
-      - '*.md'
+  pull_request:
 
 jobs:
   build:
@@ -20,63 +14,37 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v4
         with:
-          path: "src"
-
-      - name: Checkout builds branch
-        uses: actions/checkout@v4
-        with:
-          ref: "builds"
-          path: "builds"
-
-      - name: Clean old builds
-        run: rm -f $GITHUB_WORKSPACE/builds/*.cs3 || true
+          path: src
 
       - name: Setup JDK 17
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Setup Android SDK manually
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y wget unzip
-          mkdir -p $HOME/android-sdk
-          wget https://dl.google.com/android/repository/commandlinetools-linux-10406996_latest.zip -O cmdline-tools.zip
-          unzip cmdline-tools.zip -d $HOME/android-sdk/cmdline-tools
-          mkdir -p $HOME/android-sdk/cmdline-tools/latest
-          mv $HOME/android-sdk/cmdline-tools/cmdline-tools/* $HOME/android-sdk/cmdline-tools/latest/
-          echo "ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
-          echo "ANDROID_SDK_ROOT=$HOME/android-sdk" >> $GITHUB_ENV
-          echo "$HOME/android-sdk/cmdline-tools/latest/bin" >> $GITHUB_PATH
-          echo "$HOME/android-sdk/platform-tools" >> $GITHUB_PATH
-          yes | $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses
-          $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.2"
-
-      - name: Create local.properties for StreamPlay only
+      - name: Write local.properties for StreamPlay only
         env:
           StreamPlayAPI: ${{ secrets.StreamPlayAPI }}
-          PROXYAPI: ${{ secrets.PROXYAPI }}
         run: |
-          LOCAL_DIR="$GITHUB_WORKSPACE/src/StreamPlay"
-          if [ -d "$LOCAL_DIR" ]; then
-            echo "StreamPlayAPI=$StreamPlayAPI" >> "$LOCAL_DIR/local.properties"
-            echo "PROXYAPI=$PROXYAPI" >> "$LOCAL_DIR/local.properties"
-          fi
+          cd $GITHUB_WORKSPACE/src
+          echo "StreamPlayAPI=$StreamPlayAPI" > local.properties
+
+      - name: Grant execute permission for gradlew
+        run: |
+          cd $GITHUB_WORKSPACE/src
+          chmod +x gradlew
 
       - name: Build Plugins
         run: |
           cd $GITHUB_WORKSPACE/src
-          chmod +x gradlew
           ./gradlew make makePluginsJson
-          find . -name "*.cs3" -exec cp {} $GITHUB_WORKSPACE/builds \;
-          cp build/plugins.json $GITHUB_WORKSPACE/builds
 
-      - name: Push builds
+      - name: Copy build artifacts
         run: |
-          cd $GITHUB_WORKSPACE/builds
-          git config --local user.email "actions@github.com"
-          git config --local user.name "GitHub Actions"
-          git add .
-          git commit --amend -m "Build $GITHUB_SHA" || exit 0
-          git push --force
+          mkdir -p $GITHUB_WORKSPACE/builds
+          cp $GITHUB_WORKSPACE/src/**/build/*.cs3 $GITHUB_WORKSPACE/builds || true
+          cp $GITHUB_WORKSPACE/src/**/build/*.jar $GITHUB_WORKSPACE/builds || true
+          cp $GITHUB_WORKSPACE/src/build/plugins.json $GITHUB_WORKSPACE/builds || true
+
+      - name: List builds folder
+        run: ls -la $GITHUB_WORKSPACE/builds
