@@ -1,4 +1,4 @@
-package com.phisher98
+package com.najid
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.lagradost.cloudstream3.CommonActivity.activity
@@ -34,9 +34,9 @@ import com.lagradost.cloudstream3.utils.AppUtils
 import com.lagradost.cloudstream3.utils.AppUtils.toJson
 import com.lagradost.cloudstream3.utils.ExtractorLink
 import com.lagradost.nicehttp.RequestBodyTypes
-import com.phisher98.StreamPlayAnime.LinkData
-import com.phisher98.StreamPlayTorrent.Companion.CometAPI
-import com.phisher98.StreamPlayTorrent.Companion.TorrentioAnimeAPI
+import com.najid.StreamPlayAnime.LinkData
+import com.najid.StreamPlayTorrent.Companion.CometAPI
+import com.najid.StreamPlayTorrent.Companion.TorrentioAnimeAPI
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
@@ -156,7 +156,7 @@ class StreamplayTorrentAnime : MainAPI() {
         } else {
             null
         }
-        val href= com.phisher98.StreamPlayAnime.LinkData(
+        val href= com.najid.StreamPlayAnime.LinkData(
             malId = ids.idMal,
             aniId = ids.id,
             title = data.getTitle(),
@@ -166,7 +166,7 @@ class StreamplayTorrentAnime : MainAPI() {
         ).toStringData()
 
         val episodes = (1..data.totalEpisodes()).map { i ->
-            val linkData = com.phisher98.StreamPlayAnime.LinkData(
+            val linkData = com.najid.StreamPlayAnime.LinkData(
                 malId = ids.idMal,
                 aniId = ids.id,
                 title = data.getTitle(),
