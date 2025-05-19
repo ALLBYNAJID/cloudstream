@@ -1,2 +1,15 @@
-"id": "najid.StreamPlay",
-"pluginClass": "com.najid.StreamPlayPlugin",
+{
+    "iconUrl": "https://www.google.com/s2/favicons?domain=www5.javmost.com&sz=%size%",
+    "apiVersion": 1,
+    "repositoryUrl": "https://github.com/ALLBYNAJID/cloudstream",
+    "fileSize": 8395,
+    "status": 3,                  ←←← CHANGE THIS
+    "language": "en",
+    "authors": ["Najid"],
+    "tvTypes": ["NSFW"],
+    "version": 5,
+    "internalName": "JavMost",
+    "description": "",
+    "url": "https://raw.githubusercontent.com/ALLBYNAJID/cloudstream/builds/JavMost.cs3",
+    "name": "JavMost"
+}
