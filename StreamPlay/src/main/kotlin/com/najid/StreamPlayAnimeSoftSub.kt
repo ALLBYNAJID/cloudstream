@@ -1,12 +1,12 @@
-package com.nemo
+package com.najid
 
-import com.nemo.StreamPlay.Companion.anilistAPI
-import com.nemo.StreamPlay.Companion.malsyncAPI
-import com.nemo.StreamPlayExtractor.invokeAnimes
-import com.nemo.StreamPlayExtractor.invokeAnimeKai
-import com.nemo.StreamPlayExtractor.invokeAnizone
-//import com.nemo.StreamPlayExtractor.invokeGrani
-import com.nemo.StreamPlayExtractor.invokeHianime
+import com.najid.StreamPlay.Companion.anilistAPI
+import com.najid.StreamPlay.Companion.malsyncAPI
+import com.najid.StreamPlayExtractor.invokeAnimes
+import com.najid.StreamPlayExtractor.invokeAnimeKai
+import com.najid.StreamPlayExtractor.invokeAnizone
+//import com.najid.StreamPlayExtractor.invokeGrani
+import com.najid.StreamPlayExtractor.invokeHianime
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.lagradost.cloudstream3.CommonActivity.activity
 import com.lagradost.cloudstream3.DubStatus
@@ -41,7 +41,7 @@ import com.lagradost.cloudstream3.utils.AppUtils
 import com.lagradost.cloudstream3.utils.AppUtils.toJson
 import com.lagradost.cloudstream3.utils.ExtractorLink
 import com.lagradost.nicehttp.RequestBodyTypes
-import com.nemo.StreamPlayExtractor.invokeAnichi
+import com.najid.StreamPlayExtractor.invokeAnichi
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.util.Calendar
