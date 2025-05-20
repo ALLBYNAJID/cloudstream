@@ -1,4 +1,4 @@
-package com.nemo
+package com.najid
 
 import com.nemo.StreamPlay.Companion.anilistAPI
 import com.nemo.StreamPlay.Companion.malsyncAPI
