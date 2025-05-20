@@ -1,31 +1,40 @@
-name: Build APK
+name: Build All Cloudstream Extensions
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Set up JDK 17
-      uses: actions/setup-java@v3
-      with:
-        java-version: '17'
-        distribution: 'temurin'
+      - name: Set up Java 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 17
 
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
 
-    - name: Build with Gradle
-      run: ./gradlew assembleRelease
+      - name: Build all extensions
+        run: ./gradlew clean assembleRelease --stacktrace
 
-    - name: Upload APK
-      uses: actions/upload-artifact@v3
-      with:
-        name: app-release.apk
-        path: app/build/outputs/apk/release/app-release.apk
+      - name: Upload built extensions artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: cloudstream-extensions
+          # Adjust paths if your build outputs are elsewhere
+          path: |
+            StreamPlay/build/outputs/**/*.cs3
+            OtherExtension/build/outputs/**/*.cs3
+            # Add more extensions' output paths here if needed
