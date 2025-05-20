@@ -1,4 +1,4 @@
-name: Build All Cloudstream Extensions
+name: Build Cloudstream Extensions
 
 on:
   push:
@@ -14,10 +14,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Set up Java 17
+      - name: Setup Java 17 (Temurin)
         uses: actions/setup-java@v3
         with:
           distribution: temurin
@@ -26,15 +26,14 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x ./gradlew
 
-      - name: Build all extensions
+      - name: Build all extensions (assembleRelease)
         run: ./gradlew clean assembleRelease --stacktrace
 
       - name: Upload built extensions artifacts
         uses: actions/upload-artifact@v3
         with:
           name: cloudstream-extensions
-          # Adjust paths if your build outputs are elsewhere
           path: |
             StreamPlay/build/outputs/**/*.cs3
-            OtherExtension/build/outputs/**/*.cs3
-            # Add more extensions' output paths here if needed
+            # add other extensions here if needed, e.g.:
+            # AnotherExtension/build/outputs/**/*.cs3
