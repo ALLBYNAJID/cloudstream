@@ -1,18 +1,18 @@
-package com.nemo
+package com.najid
 
 import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
 import app.cash.quickjs.QuickJs
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.nemo.DumpUtils.queryApi
-import com.nemo.StreamPlay.Companion.anilistAPI
-import com.nemo.StreamPlay.Companion.filmxyAPI
-import com.nemo.StreamPlay.Companion.fourthAPI
-import com.nemo.StreamPlay.Companion.gdbot
-import com.nemo.StreamPlay.Companion.hdmovies4uAPI
-import com.nemo.StreamPlay.Companion.malsyncAPI
-import com.nemo.StreamPlay.Companion.thrirdAPI
+import com.najid.DumpUtils.queryApi
+import com.najid.StreamPlay.Companion.anilistAPI
+import com.najid.StreamPlay.Companion.filmxyAPI
+import com.najid.StreamPlay.Companion.fourthAPI
+import com.najid.StreamPlay.Companion.gdbot
+import com.najid.StreamPlay.Companion.hdmovies4uAPI
+import com.najid.StreamPlay.Companion.malsyncAPI
+import com.najid.StreamPlay.Companion.thrirdAPI
 import com.google.gson.Gson
 import com.lagradost.api.Log
 import com.lagradost.cloudstream3.*
