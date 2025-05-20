@@ -944,7 +944,7 @@ suspend fun tmdbToAnimeId(title: String?, year: Int?, season: String?, type: TvT
     ).toJson().toRequestBody(RequestBodyTypes.JSON.toMediaTypeOrNull())
     val res = app.post(anilistAPI, requestBody = data)
         .parsedSafe<AniSearch>()?.data?.Page?.media?.firstOrNull()
-    Log.d("Phisher", res?.idMal.toString())
+    Log.d("najid", res?.idMal.toString())
     return AniIds(res?.id, res?.idMal)
 
 }
@@ -1964,7 +1964,7 @@ fun loadHindMoviezLinks(
                 val res = app.get(item, timeout = 30, allowRedirects = true)
                 val doc = res.document
                 val size = doc.selectFirst("body > div.container > p:nth-child(3)")?.ownText()
-                Log.d("Phisher HH Size",size.toString())
+                Log.d("najid HH Size",size.toString())
                 if (res.url.contains("hpage.site")) {
                     val quality = getVideoQuality(doc.select(".container h2").text())
                     val linkElements = doc.select(".container a")
@@ -2587,7 +2587,7 @@ suspend fun getPlayer4uUrl(
     val response = app.get(url, referer = referer)
     var script = getAndUnpack(response.text).takeIf { it.isNotEmpty() }
         ?: response.document.selectFirst("script:containsData(sources:)")?.data()
-    Log.d("Phisher",script.toString())
+    Log.d("najid",script.toString())
     if (script == null) {
         val iframeUrl =
             Regex("""<iframe src="(.*?)"""").find(response.text)?.groupValues?.getOrNull(1)

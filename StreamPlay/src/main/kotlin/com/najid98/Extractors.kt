@@ -1752,12 +1752,12 @@ class MegaUp : ExtractorApi() {
         }.getOrNull()
 
         if (encodedResult == null) {
-            Log.d("Phisher", "Encoded result is null")
+            Log.d("najid", "Encoded result is null")
             return
         }
         val megaKeysSrc = app.get(Autokai).parsedSafe<AutoKai>()?.mega
         if (megaKeysSrc == null) {
-            Log.d("Phisher", "Mega keys source is null")
+            Log.d("najid", "Mega keys source is null")
             return
         }
 
