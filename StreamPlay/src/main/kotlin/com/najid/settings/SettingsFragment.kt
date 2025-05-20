@@ -1,4 +1,4 @@
-package com.nemo.settings
+package com.najid.settings
 
 import android.annotation.SuppressLint
 import android.content.SharedPreferences
@@ -12,8 +12,8 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.annotation.RequiresApi
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.nemo.BuildConfig
-import com.nemo.StreamPlayPlugin
+import com.najid.BuildConfig
+import com.najid.StreamPlayPlugin
 import com.lagradost.cloudstream3.CommonActivity.showToast
 
 class SettingsFragment(
