@@ -25,10 +25,12 @@ jobs:
         wget https://services.gradle.org/distributions/gradle-8.12-bin.zip
         unzip gradle-8.12-bin.zip
         sudo mv gradle-8.12 /opt/gradle
-        sudo rm -f /usr/bin/gradle   # Remove existing symlink or binary if present
+        sudo rm -f /usr/bin/gradle
         sudo ln -s /opt/gradle/bin/gradle /usr/bin/gradle
         gradle -v
 
+    - name: Make Gradle Wrapper executable
+      run: chmod +x ./gradlew
+
     - name: Build Cloudstream Extension
-      run: |
-        ./gradlew clean assembleRelease --stacktrace
+      run: ./gradlew clean assembleRelease --stacktrace
