@@ -20,13 +20,13 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v4
         with:
-          path: "src"
+          path: src
 
       - name: Checkout builds branch
         uses: actions/checkout@v4
         with:
-          ref: "builds"
-          path: "builds"
+          ref: builds
+          path: builds
 
       - name: Clean old builds
         run: rm -f $GITHUB_WORKSPACE/builds/*.cs3 || true
@@ -35,16 +35,15 @@ jobs:
         uses: actions/setup-java@v4
         with:
           java-version: '17'
-          distribution: 'temurin'
+          distribution: temurin
 
       - name: Setup Android SDK manually
         run: |
           sudo apt-get update
           sudo apt-get install -y wget unzip
-          mkdir -p $HOME/android-sdk
+          mkdir -p $HOME/android-sdk/cmdline-tools/latest
           wget https://dl.google.com/android/repository/commandlinetools-linux-10406996_latest.zip -O cmdline-tools.zip
           unzip cmdline-tools.zip -d $HOME/android-sdk/cmdline-tools
-          mkdir -p $HOME/android-sdk/cmdline-tools/latest
           mv $HOME/android-sdk/cmdline-tools/cmdline-tools/* $HOME/android-sdk/cmdline-tools/latest/
           echo "ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
           echo "ANDROID_SDK_ROOT=$HOME/android-sdk" >> $GITHUB_ENV
@@ -53,19 +52,24 @@ jobs:
           yes | $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses
           $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.2"
 
-      - name: Cross Build All Plugins
-        run: |
-          cd $GITHUB_WORKSPACE/src
-          chmod +x gradlew
-          ./gradlew make makePluginsJson
-          find . -name "*.cs3" -exec cp {} $GITHUB_WORKSPACE/builds \;
-          cp build/plugins.json $GITHUB_WORKSPACE/builds
+      - name: Make gradlew executable
+        run: chmod +x src/gradlew
 
-      - name: Push builds
+      - name: Build plugins with debug info
         run: |
-          cd $GITHUB_WORKSPACE/builds
+          cd src
+          ./gradlew clean make makePluginsJson --stacktrace --info --no-daemon
+
+      - name: Copy plugin files to builds
+        run: |
+          find src -name "*.cs3" -exec cp {} builds/ \;
+          cp src/build/plugins.json builds/plugins.json
+
+      - name: Commit and push builds
+        run: |
+          cd builds
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
           git add .
-          git commit --amend -m "Build $GITHUB_SHA" || exit 0
+          git diff --cached --quiet || git commit -m "Build $GITHUB_SHA"
           git push --force
