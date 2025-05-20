@@ -1,35 +1,47 @@
-name: Build Extensions
+name: Build Cloudstream Extension
 
 on:
-  workflow_dispatch:
   push:
     branches:
       - main
   pull_request:
 
 jobs:
-  build:
+  build-extension:
+    name: Build Cloudstream Extension Plugin
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+    - name: Checkout repository
+      uses: actions/checkout@v3
 
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: 17
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        distribution: temurin
+        java-version: 17
 
-      - name: Make Gradle executable
-        run: chmod +x ./gradlew
+    - name: Cache Gradle packages
+      uses: actions/cache@v3
+      with:
+        path: ~/.gradle/caches
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
 
-      - name: Build all extensions
-        run: ./gradlew build
+    - name: Cache Gradle wrapper
+      uses: actions/cache@v3
+      with:
+        path: ~/.gradle/wrapper
+        key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle-wrapper.properties') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-wrapper-
 
-      - name: Upload built extensions
-        uses: actions/upload-artifact@v4
-        with:
-          name: built-extensions
-          path: |
-            */build/outputs/*.zip
+    - name: Build StreamPlay module
+      run: ./gradlew :StreamPlay:assembleRelease --no-daemon
+
+    - name: Upload StreamPlay artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: StreamPlay-release
+        path: StreamPlay/build/outputs/aar/StreamPlay-release.aar
