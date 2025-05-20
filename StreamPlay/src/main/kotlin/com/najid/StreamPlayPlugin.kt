@@ -1,8 +1,8 @@
-package com.nemo
+package com.najid
 
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
-import com.nemo.settings.SettingsFragment
+import com.najid.settings.SettingsFragment
 import com.lagradost.cloudstream3.plugins.CloudstreamPlugin
 import com.lagradost.cloudstream3.extractors.DoodYtExtractor
 import com.lagradost.cloudstream3.extractors.FileMoon
