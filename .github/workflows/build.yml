@@ -1,4 +1,4 @@
-name: Build All Plugins
+name: Build
 
 concurrency:
   group: "build"
@@ -7,59 +7,57 @@ concurrency:
 on:
   push:
     branches:
-      - main
       - master
+      - main
     paths-ignore:
       - '*.md'
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout source
-        uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4.2.2
         with:
           path: "src"
 
-      - name: Checkout builds branch
-        uses: actions/checkout@v4
+      - name: Checkout builds
+        uses: actions/checkout@v4.2.2
         with:
           ref: "builds"
           path: "builds"
 
       - name: Clean old builds
-        run: rm -f $GITHUB_WORKSPACE/builds/*.cs3 || true
+        run: |
+          rm $GITHUB_WORKSPACE/builds/*.cs3 || true
+          rm $GITHUB_WORKSPACE/builds/*.jar || true
 
       - name: Setup JDK 17
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v4.6.0
         with:
-          java-version: '17'
-          distribution: 'temurin'
+          distribution: "adopt"
+          java-version: 17
 
-      - name: Setup Android SDK manually
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3.2.2
+
+      - name: Create empty local.properties
         run: |
-          sudo apt-get update
-          sudo apt-get install -y wget unzip
-          mkdir -p $HOME/android-sdk
-          wget https://dl.google.com/android/repository/commandlinetools-linux-10406996_latest.zip -O cmdline-tools.zip
-          unzip cmdline-tools.zip -d $HOME/android-sdk/cmdline-tools
-          mkdir -p $HOME/android-sdk/cmdline-tools/latest
-          mv $HOME/android-sdk/cmdline-tools/cmdline-tools/* $HOME/android-sdk/cmdline-tools/latest/
-          echo "ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
-          echo "ANDROID_SDK_ROOT=$HOME/android-sdk" >> $GITHUB_ENV
-          echo "$HOME/android-sdk/cmdline-tools/latest/bin" >> $GITHUB_PATH
-          echo "$HOME/android-sdk/platform-tools" >> $GITHUB_PATH
-          yes | $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses
-          $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager "platform-tools" "platforms;android-33" "build-tools;33.0.2"
+          touch $GITHUB_WORKSPACE/src/local.properties
 
-      - name: Cross Build All Plugins
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Build Plugins
         run: |
           cd $GITHUB_WORKSPACE/src
           chmod +x gradlew
           ./gradlew make makePluginsJson
-          find . -name "*.cs3" -exec cp {} $GITHUB_WORKSPACE/builds \;
+          ./gradlew ensureJarCompatibility
+          cp **/build/*.cs3 $GITHUB_WORKSPACE/builds
           cp build/plugins.json $GITHUB_WORKSPACE/builds
+          cp local.properties $GITHUB_WORKSPACE/builds
 
       - name: Push builds
         run: |
