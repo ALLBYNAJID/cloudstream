@@ -1412,7 +1412,7 @@ object StreamPlayExtractor : StreamPlay() {
         subtitleCallback: (SubtitleFile) -> Unit,
         callback: (ExtractorLink) -> Unit
     ) {
-        Log.d("nemo", "invoke hianime")
+        Log.d("najid", "invoke hianime")
         val headers = mapOf(
             "X-Requested-With" to "XMLHttpRequest",
         )
@@ -1463,7 +1463,7 @@ object StreamPlayExtractor : StreamPlay() {
                             )
                             if (dubtype.equals("sub", ignoreCase = true)) {
 
-                                Log.d("nemo", "hianime wait")
+                                Log.d("najid", "hianime wait")
                                 animeKaiDone?.await()
                                 animePaheDone?.await()
                                 M3u8Helper.generateM3u8(
@@ -1472,7 +1472,7 @@ object StreamPlayExtractor : StreamPlay() {
                                     mainUrl,
                                     headers = m3u8headers
                                 ).forEach(callback)
-                                Log.d("nemo", "hianime added")
+                                Log.d("najid", "hianime added")
                             }
                         }
 
