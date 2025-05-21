@@ -1,4 +1,4 @@
-package com.najid
+package com.niloy
 
 import com.lagradost.cloudstream3.Episode
 import com.lagradost.cloudstream3.HomePageResponse
@@ -118,7 +118,6 @@ open class BdixDhakaFlix14Provider : MainAPI() {
     }
 
     override val mainPage = mainPageOf(
-    override val mainPage = mainPageOf(
         "Animation Movies (1080p)/" to "Animation Movies",
         "English Movies (1080p)/($year) 1080p/" to "English Movies",
         "Hindi Movies/($year)/" to "Hindi Movies",
@@ -127,6 +126,7 @@ open class BdixDhakaFlix14Provider : MainAPI() {
         "SOUTH INDIAN MOVIES/South Movies/$year/" to "South Movies",
         "/KOREAN TV %26 WEB Series/" to "Korean TV & WEB Series"
     )
+
     // Number of items to load per page
     private val itemsPerPage = 12
 
