@@ -34,6 +34,8 @@ open class BdixDhakaFlix14Provider : MainAPI() {
     override val hasQuickSearch = false
     override val instantLinkLoading = true
     override var lang = "bn"
+    override val tvSeriesKeyword: List<String> =
+        listOf("Awards", "WWE", "KOREAN", "Documentary", "Anime","TV-WEB-Series")
     override val supportedTypes = setOf(
         TvType.Movie, TvType.AnimeMovie, TvType.TvSeries
     )
@@ -118,14 +120,31 @@ open class BdixDhakaFlix14Provider : MainAPI() {
     }
 
     override val mainPage = mainPageOf(
-        "Animation Movies (1080p)/" to "Animation Movies",
-        "English Movies (1080p)/($year) 1080p/" to "English Movies",
-        "Hindi Movies/($year)/" to "Hindi Movies",
-        "IMDb Top-250 Movies/" to "IMDb Top-250 Movies",
-        "SOUTH INDIAN MOVIES/Hindi Dubbed/($year)/" to "Hindi Dubbed",
-        "SOUTH INDIAN MOVIES/South Movies/$year/" to "South Movies",
-        "/KOREAN TV %26 WEB Series/" to "Korean TV & WEB Series"
-    )
+    "English Movies/($year)/" to "English Movies",
+    "English Movies (1080p)/($year) 1080p/" to "English Movies (1080p)",
+    "Hindi Movies/($year)/" to "Hindi Movies",
+    "IMDb Top-250 Movies/" to "IMDb Top-250 Movies",
+    "Foreign Language Movies/Bangla Dubbing Movies/" to "Bangla Dubbing Movies",
+    "Foreign Language Movies/Pakistani Movie/" to "Pakistani Movies",
+    "Kolkata Bangla Movies/(2022)/" to "Kolkata Bangla Movies",
+    "SOUTH INDIAN MOVIES/Hindi Dubbed/($year)/" to "Hindi Dubbed",
+    "SOUTH INDIAN MOVIES/South Movies/$year/" to "South Movies",
+    "Foreign Language Movies/Chinese Language/" to "Chinese Movies",
+    "Foreign Language Movies/Japanese Language/" to "Japanese Movies",
+    "Foreign Language Movies/Korean Language/" to "Korean Movies",
+    "/KOREAN TV %26 WEB Series/" to "Korean TV & WEB Series",
+    "TV-WEB-Series/TV Series ★%20 0%20 —%20 9/" to "TV Series ★ 0 — 9",
+    "TV-WEB-Series/TV Series ♥%20 A%20 —%20 L/" to "TV Series ♥ A — L",
+    "TV-WEB-Series/TV Series ♦%20 M%20 —%20 R/" to "TV Series ♦ M — R",
+    "TV-WEB-Series/TV Series ♦%20 S%20 —%20 Z/" to "TV Series ♦ S — Z",
+    "Animation Movies (1080p)/" to "Animation Movies",
+    "Anime %26 Cartoon TV Series/Anime-TV Series ♥%20 A%20 —%20 F/" to "Anime TV Series",
+    "Documentary/" to "Documentary",
+    "Awards %26 TV Shows/%23 TV SPECIAL %26 SHOWS/" to "TV SPECIAL & SHOWS",
+    "Awards %26 TV Shows/%23 AWARDS/" to "Awards",
+    "WWE %26 AEW Wrestling/WWE Wrestling/%282025%29%20PPV/" to "WWE PPV",
+    "WWE %26 AEW Wrestling/WWE Wrestling/" to "WWE"
+)
 
     // Number of items to load per page
     private val itemsPerPage = 12
