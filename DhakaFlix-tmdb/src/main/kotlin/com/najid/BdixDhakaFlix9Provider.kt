@@ -6,8 +6,7 @@ import com.lagradost.cloudstream3.mainPageOf
 class BdixDhakaFlix9Provider : BdixDhakaFlix14Provider() {
     override var mainUrl = "http://172.16.50.9"
     override var name = "DhakaFlix-Anime and Korean Series"
-    override val tvSeriesKeyword: List<String> =
-        listOf("Awards", "WWE", "KOREAN", "Documentary", "Anime")
+    override val tvSeriesKeyword: List<String> = emptyList()
     override val serverName: String = "DHAKA-FLIX-9"
     override val supportedTypes = setOf(
         TvType.Movie,
