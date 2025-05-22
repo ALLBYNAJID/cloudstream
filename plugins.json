@@ -1,0 +1,74 @@
+[
+    {
+        "iconUrl": "https://dflix.discoveryftp.net/assets/images/icon.png",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/ALLBYNAJID/cloudstream",
+        "fileSize": 18071,
+        "status": 1,
+        "language": "bn",
+        "authors": [
+            "Najid"
+        ],
+        "tvTypes": [
+            "Movie",
+            "TvSeries",
+            "Anime",
+            "AnimeMovie",
+            "OVA",
+            "Cartoon",
+            "AsianDrama",
+            "Others",
+            "Documentary"
+        ],
+        "version": 8,
+        "internalName": "BdixDflix",
+        "description": "Discovery BDIX Provider",
+        "url": "https://raw.githubusercontent.com/ALLBYNAJID/cloudstream/builds/BdixDflix.cs3",
+        "name": "BdixDflix"
+    },
+    {
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/ALLBYNAJID/cloudstream",
+        "fileSize": 53283,
+        "status": 1,
+        "language": "bn",
+        "authors": [
+            "Najid"
+        ],
+        "tvTypes": [
+            "Movie",
+            "TvSeries",
+            "Anime",
+            "AnimeMovie",
+            "OVA",
+            "Cartoon",
+            "AsianDrama",
+            "Others",
+            "Documentary"
+        ],
+        "version": 2,
+        "internalName": "DhakaFlix-tmdb",
+        "description": "DhakaFlix BDIX Provider with TMDB support for media description",
+        "url": "https://raw.githubusercontent.com/ALLBYNAJID/cloudstream/builds/DhakaFlix-tmdb.cs3",
+        "name": "DhakaFlix-tmdb"
+    },
+    {
+        "iconUrl": "https://www.google.com/s2/favicons?domain=turkish123.com&sz=%size%",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/ALLBYNAJID/cloudstream",
+        "fileSize": 12761,
+        "status": 1,
+        "language": "tr",
+        "authors": [
+            "Najid"
+        ],
+        "tvTypes": [
+            "TvSeries",
+            "Movie"
+        ],
+        "version": 1,
+        "internalName": "Turkish",
+        "url": "https://raw.githubusercontent.com/ALLBYNAJID/cloudstream/builds/Turkish.cs3",
+        "name": "Turkish"
+    }
+]
